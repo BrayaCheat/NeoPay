@@ -54,4 +54,9 @@ public class UserController {
     public ResponseEntity<User> createUser(@RequestBody RegisterRequestDTO dto) {
         return ResponseEntity.status(201).body(userService.createUser(dto));
     }
+
+    @PutMapping("/admin/users/{userId}")
+    public ResponseEntity<User> updateUser(@PathVariable Long userId, @RequestBody RegisterRequestDTO dto){
+        return ResponseEntity.status(201).body(userService.updateUser(userId, dto));
+    }
 }
