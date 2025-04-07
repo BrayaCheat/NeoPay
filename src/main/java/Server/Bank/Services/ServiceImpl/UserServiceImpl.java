@@ -1,5 +1,6 @@
 package Server.Bank.Services.ServiceImpl;
 
+import Server.Bank.DTO.Request.ChangePasswordRequestDTO;
 import Server.Bank.DTO.Request.RegisterRequestDTO;
 import Server.Bank.Exceptions.NotFoundException;
 import Server.Bank.Models.User;
@@ -67,12 +68,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void changePassword(Long userId, String oldPassword, String newPassword) {
+    public void changePassword(Long userId, ChangePasswordRequestDTO dto) {
         User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User id: " + userId + " not found!"));
-        if(!passwordEncoder.matches(oldPassword, user.getPassword())){
+        if(!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())){
             throw new RuntimeException("Old password is incorrect!");
         }
-        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
         userRepository.save(user);
     }
 

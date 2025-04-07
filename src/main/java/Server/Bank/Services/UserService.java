@@ -1,5 +1,6 @@
 package Server.Bank.Services;
 
+import Server.Bank.DTO.Request.ChangePasswordRequestDTO;
 import Server.Bank.DTO.Request.RegisterRequestDTO;
 import Server.Bank.Models.User;
 import org.springframework.data.domain.Pageable;
@@ -11,7 +12,7 @@ public interface UserService {
     // For user
     List<User> allUsers(Pageable pageable);
     User getUser();
-    void changePassword(Long userId, String oldPassword, String newPassword);
+    void changePassword(Long userId, ChangePasswordRequestDTO dto);
     void forgotPassword();
 
     // For admin

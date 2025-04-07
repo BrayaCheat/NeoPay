@@ -1,16 +1,15 @@
 package Server.Bank.Controllers;
 
+import Server.Bank.DTO.Request.ChangePasswordRequestDTO;
 import Server.Bank.Models.User;
 import Server.Bank.Services.ServiceImpl.UserServiceImpl;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,6 +28,12 @@ public class UserController {
     @GetMapping("/user/me")
     public ResponseEntity<User> getUser() {
         return ResponseEntity.status(200).body(userService.getUser());
+    }
+
+    @PostMapping("/user/change-password")
+    public ResponseEntity<?> changePassword(@RequestParam Long userId, @Valid @RequestBody ChangePasswordRequestDTO dto){
+        userService.changePassword(userId, dto);
+        return ResponseEntity.status(201).body("Password changed.");
     }
 
     // For admin
