@@ -1,6 +1,7 @@
 package Server.Bank.Controllers;
 
 import Server.Bank.DTO.Request.ChangePasswordRequestDTO;
+import Server.Bank.DTO.Request.RegisterRequestDTO;
 import Server.Bank.Models.User;
 import Server.Bank.Services.ServiceImpl.UserServiceImpl;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -37,7 +38,7 @@ public class UserController {
     }
 
     // For admin
-    @GetMapping("/admin/allUsers")
+    @GetMapping("/admin/users")
     public ResponseEntity<List<User>> allUser(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -47,5 +48,10 @@ public class UserController {
         Sort sort = direction.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(page - 1, size, sort);
         return ResponseEntity.status(200).body(userService.allUsers(pageable));
+    }
+
+    @PostMapping("/admin/users")
+    public ResponseEntity<User> createUser(@RequestBody RegisterRequestDTO dto) {
+        return ResponseEntity.status(201).body(userService.createUser(dto));
     }
 }
