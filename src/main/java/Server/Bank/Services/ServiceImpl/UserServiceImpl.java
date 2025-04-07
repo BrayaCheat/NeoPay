@@ -61,13 +61,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void blockUser(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User id: " + userId + " not found!"));
-        user.setActive(false);
-        userRepository.save(user);
-    }
-
-    @Override
     public void changePassword(Long userId, ChangePasswordRequestDTO dto) {
         User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User id: " + userId + " not found!"));
         if(!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())){
@@ -80,5 +73,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public void forgotPassword() {
 
+    }
+
+    @Override
+    public void blockUser(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User id: " + userId + " not found!"));
+        if(user.isActive()){
+            user.setActive(false);
+            userRepository.save(user);
+        }
+    }
+
+    @Override
+    public void unblockUser(Long userId){
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User id: " + userId + " not found!"));
+        if(!user.isActive()){
+            user.setActive(true);
+            userRepository.save(user);
+        }
     }
 }

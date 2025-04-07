@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "User")
+@Tag(name = "Users Management")
 @RestController
 @RequestMapping("/api/v1")
 public class UserController {
@@ -26,13 +26,13 @@ public class UserController {
     }
 
     // For user
-    @GetMapping("/user/me")
+    @GetMapping("/users/me")
     public ResponseEntity<User> getUser() {
         return ResponseEntity.status(200).body(userService.getUser());
     }
 
-    @PostMapping("/user/change-password")
-    public ResponseEntity<?> changePassword(@RequestParam Long userId, @Valid @RequestBody ChangePasswordRequestDTO dto){
+    @PostMapping("/users/{userId}/change-password")
+    public ResponseEntity<?> changePassword(@PathVariable Long userId, @Valid @RequestBody ChangePasswordRequestDTO dto){
         userService.changePassword(userId, dto);
         return ResponseEntity.status(201).body("Password changed.");
     }
@@ -58,5 +58,23 @@ public class UserController {
     @PutMapping("/admin/users/{userId}")
     public ResponseEntity<User> updateUser(@PathVariable Long userId, @RequestBody RegisterRequestDTO dto){
         return ResponseEntity.status(201).body(userService.updateUser(userId, dto));
+    }
+
+    @DeleteMapping("/admin/users/{userId}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long userId){
+        userService.deleteUser(userId);
+        return ResponseEntity.status(200).body("User id: " + userId + " deleted.");
+    }
+
+    @PostMapping("/admin/users/{userId}/block-user")
+    public ResponseEntity<?> blockUser(@PathVariable Long userId){
+        userService.blockUser(userId);
+        return ResponseEntity.status(200).body("User id: " + userId + " blocked.");
+    }
+
+    @PostMapping("/admin/users/{userId}/unblock-user")
+    public ResponseEntity<?> unblockUser(@PathVariable Long userId){
+        userService.unblockUser(userId);
+        return ResponseEntity.status(200).body("User id: " + userId + " unblocked.");
     }
 }
